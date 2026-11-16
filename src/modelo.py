@@ -17,9 +17,9 @@ def temperatura_producto(producto: Producto) -> Temperatura:
         return Temperatura.INCORRECTA       #  # si el producto no esta entre -100 y 150 grados no lo podemos transportar, seria irreal. lo marcamos como incorrecto
 
 def temperatura_vehiculo_valida(vehiculo, inst: Instancia) -> bool:
-    """ En base a un vehiculo y una instancia, nos fijamos si los productos del
-        vehiculo son similares y tienen temperatura parecida. La temperatura está
-        dividida en 4 grupos. Tienen que estar todos los productos dentro del mismo grupo.
+    """ En base a un vehiculo y una instancia, nos fijamos si las temperaturas del
+        vehiculo son similares. La temperatura está dividida en 4 grupos. Tienen que
+        estar todos los productos dentro del mismo grupo.
     """
     # vehiculo es una lista de numeros, cada numero es un id de un producto
     # la instancia es el texto completo del input
@@ -40,21 +40,19 @@ def peso_vehiculo_valida(vehiculo, inst: Instancia) -> bool:
     """
     peso_vehiculo = 0
     for producto in vehiculo:
-        if peso_vehiculo <= 0:
+        if inst.productos[producto].peso <= 0:
             return False
         peso_vehiculo += inst.productos[producto].peso      # sumamos el peso de los productos del vehiculo
         
-    if peso_vehiculo > inst.capacidad_vehiculo:
+    if peso_vehiculo > inst.capacidad_vehiculo + 1e-9:
         return False
     return True
 
-def similitud_vehiculo_valida(vehiculo, inst: Instancia) -> bool:
-    """ A partir de un vehiculo y una instancia, chequea que la similitud de los productos
-        de ese vehiculo sean validos. Verificando que no 
-    """
-    for producto in vehiculo:
-        for prod in vehiculo:
-            if inst.similitud[producto][prod] < 5.0:
-                return False
-    return True
+def es_vehiculo_valido(vehiculo, inst: Instancia) -> bool:
+    return temperatura_vehiculo_valida(vehiculo, inst) and peso_vehiculo_valida(vehiculo, inst)
 
+def es_solucion_factible(inst:Instancia, sol: Solucion) -> bool:
+    for vehiculo in sol.vehiculos:
+        if es_vehiculo_valido(vehiculo, inst)!=True:
+            return False
+    return True
