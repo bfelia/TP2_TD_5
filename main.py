@@ -9,7 +9,8 @@ from src.io_tp import (
     validar_solucion_basica,
 )
 from src.constructivas import (
-    constructiva_temperatura_peso
+    constructiva_similitud,
+    constructiva_temperatura_peso,
 )
 
 from src.tipos import Instancia, Solucion
@@ -43,8 +44,8 @@ def main() -> int:
         # TODO: Agregar acá los métodos implementados por el grupo, por ejemplo:
         elif cfg.metodo == "constructiva1":
             sol = constructiva_temperatura_peso(inst)
-        # elif cfg.metodo == "constructiva2":
-        #     sol = ...
+        elif cfg.metodo == "constructiva2":
+            sol = constructiva_similitud(inst)
         # elif cfg.metodo == "metaheuristica":
         #     sol = ...
         elif cfg.metodo == "test":
