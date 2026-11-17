@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from src.tipos import Instancia, Metricas, Producto, Solucion, Temperatura
+from src.io_tp import validar_solucion_basica
 
 def temperatura_producto(producto: Producto) -> Temperatura:
     """A partir de un producto, determinamos su temperatura."""
@@ -52,6 +53,7 @@ def es_vehiculo_valido(vehiculo, inst: Instancia) -> bool:
     return temperatura_vehiculo_valida(vehiculo, inst) and peso_vehiculo_valida(vehiculo, inst)
 
 def es_solucion_factible(inst:Instancia, sol: Solucion) -> bool:
+    if not validar_solucion_basica(inst, sol)[0]: return False
     for vehiculo in sol.vehiculos:
         if es_vehiculo_valido(vehiculo, inst)!=True:
             return False

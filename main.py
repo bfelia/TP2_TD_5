@@ -8,6 +8,10 @@ from src.io_tp import (
     parsear_argumentos,
     validar_solucion_basica,
 )
+from src.constructivas import (
+    constructiva_temperatura_peso
+)
+
 from src.tipos import Instancia, Solucion
 
 # prueba de i/o hecha por ia
@@ -37,8 +41,8 @@ def main() -> int:
         if cfg.metodo == "placeholder":
             sol = resolver_placeholder(inst)
         # TODO: Agregar acá los métodos implementados por el grupo, por ejemplo:
-        # elif cfg.metodo == "constructiva1":
-        #     sol = ...
+        elif cfg.metodo == "constructiva1":
+            sol = constructiva_temperatura_peso(inst)
         # elif cfg.metodo == "constructiva2":
         #     sol = ...
         # elif cfg.metodo == "metaheuristica":
