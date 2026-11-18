@@ -35,6 +35,14 @@ def temperatura_vehiculo_valida(vehiculo, inst: Instancia) -> bool:
         return True
     else: return True
 
+def peso_vehiculo(vehiculo, inst:Instancia) -> int:
+    peso_vehiculo = 0
+    for producto in vehiculo:
+        if inst.productos[producto].peso <= 0:
+            return -1
+        peso_vehiculo += inst.productos[producto].peso 
+    return peso_vehiculo
+
 def peso_vehiculo_valida(vehiculo, inst: Instancia) -> bool:
     """ A partir de un vehiculo y una instancia, chequea que el peso de los productos
         de ese vehiculo sean validos
@@ -58,3 +66,28 @@ def es_solucion_factible(inst:Instancia, sol: Solucion) -> bool:
         if es_vehiculo_valido(vehiculo, inst)!=True:
             return False
     return True
+
+def productos_de_vehiculo(inst:Instancia, v: int | list[int], sol: Solucion) -> list[Producto]:
+    if type(v) == int:
+        if v >= len(sol.vehiculos):
+            return []
+        vehiculo = sol.vehiculos[v]
+    elif type(vehiculo) == list[int]:
+        vehiculo = v
+    else: return []
+    
+    if ((not es_vehiculo_valido(vehiculo, inst)) or (not es_solucion_factible(inst,sol))): 
+        return []
+    
+    productos = []
+    j=0
+    
+    for i in inst.productos:
+        if inst.productos[i].id == vehiculo[j]:
+            j+=1
+            productos.append(inst.productos[i])
+
+    return productos
+        
+            
+    
