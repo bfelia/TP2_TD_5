@@ -9,13 +9,13 @@ s_ij = similitud de productos
 Productos: [Producto(id=0, peso=4.0, temperatura=4.0), Producto(id=1, peso=5.0, temperatura=4.0), Producto(id=2, peso=3.0, temperatura=20.0), Producto(id=3, peso=6.0, temperatura=-18.0)]
 
 ## Archivo de entrada: 
-n C
-w_1 t_1
-...
-w_n t_n
-s_11 ... s_1n
-     ...
-s_1n ... s_nn
+1. n C
+2. w_1 t_1
+3. ...
+4. w_n t_n
+5. s_11 ... s_1n
+6.      ...
+7. s_1n ... s_nn
 
 ## Requisitos
 
