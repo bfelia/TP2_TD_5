@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.busqueda_local import relocate, swap
+from src.busqueda_local import busqueda_local, relocate, swap
 from src.io_tp import calcular_metricas
 from src.modelo import es_solucion_factible
 from src.tipos import Instancia, Producto, Solucion
@@ -87,6 +87,33 @@ class TestBusquedaLocal(unittest.TestCase):
         sol_temp = swap(sol_ini, inst, 0, 2, alpha=1.0, beta=1.0)
         self.assertTrue(es_solucion_factible(inst, sol_temp))
         self.assertEqual(sol_temp.vehiculos, [[0, 1], [2, 3], [4]])
+
+    def test_busqueda_local_combina_relocate_y_swap(self) -> None:
+        # 4 congelados cap=10: {0,1} muy similares, {2,3} muy similares,
+        # arrancando mal agrupados y en 3 vehiculos: [[0, 2], [1], [3]]
+        productos = [
+            Producto(id=0, peso=5.0, temperatura=-18.0),
+            Producto(id=1, peso=5.0, temperatura=-18.0),
+            Producto(id=2, peso=5.0, temperatura=-18.0),
+            Producto(id=3, peso=5.0, temperatura=-18.0),
+        ]
+        similitud = [
+            [1.00, 0.95, 0.05, 0.05],
+            [0.95, 1.00, 0.05, 0.05],
+            [0.05, 0.05, 1.00, 0.95],
+            [0.05, 0.05, 0.95, 1.00],
+        ]
+        inst = Instancia(
+            n=4, capacidad_vehiculo=10.0, productos=productos, similitud=similitud
+        )
+        sol_ini = Solucion(vehiculos=[[0, 2], [1], [3]])
+        sol_res = busqueda_local(sol_ini, inst, alpha=1.0, beta=1.0)
+
+        self.assertEqual(sol_ini.vehiculos, [[0, 2], [1], [3]])
+        self.assertTrue(es_solucion_factible(inst, sol_res))
+        m_res = calcular_metricas(inst, sol_res, alpha=1.0, beta=1.0)
+        self.assertEqual(m_res.cantidad_vehiculos, 2)
+        self.assertAlmostEqual(m_res.suma_similitudes, 1.90)
 
 
 if __name__ == "__main__":

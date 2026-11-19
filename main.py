@@ -8,6 +8,7 @@ from src.io_tp import (
     parsear_argumentos,
     validar_solucion_basica,
 )
+from src.busqueda_local import busqueda_local
 from src.constructivas import (
     constructiva_similitud,
     constructiva_temperatura_peso,
@@ -46,6 +47,10 @@ def main() -> int:
             sol = constructiva_temperatura_peso(inst)
         elif cfg.metodo == "constructiva2":
             sol = constructiva_similitud(inst)
+        elif cfg.metodo == "bl1":
+            sol = busqueda_local(constructiva_temperatura_peso(inst), inst, cfg.alpha, cfg.beta)
+        elif cfg.metodo == "bl2":
+            sol = busqueda_local(constructiva_similitud(inst), inst, cfg.alpha, cfg.beta)
         # elif cfg.metodo == "metaheuristica":
         #     sol = ...
         elif cfg.metodo == "test":
