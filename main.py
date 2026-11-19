@@ -13,6 +13,7 @@ from src.constructivas import (
     constructiva_similitud,
     constructiva_temperatura_peso,
 )
+from src.metaheuristica import metaheuristica
 
 from src.tipos import Instancia, Solucion
 
@@ -51,8 +52,8 @@ def main() -> int:
             sol = busqueda_local(constructiva_temperatura_peso(inst), inst, cfg.alpha, cfg.beta)
         elif cfg.metodo == "bl2":
             sol = busqueda_local(constructiva_similitud(inst), inst, cfg.alpha, cfg.beta)
-        # elif cfg.metodo == "metaheuristica":
-        #     sol = ...
+        elif cfg.metodo == "metaheuristica":
+            sol = metaheuristica(inst, cfg.alpha, cfg.beta, cfg.semilla, cfg.max_iter, cfg.top_k)
         elif cfg.metodo == "test":
             print(min([5,2,3,9,7,8]))            
         else:

@@ -35,6 +35,18 @@ def parsear_argumentos(argv: list[str] | None = None) -> argparse.Namespace:
         help="Semilla entera para métodos aleatorios (por defecto: 42)",
     )
     parser.add_argument(
+        "--max_iter",
+        type=int,
+        default=20,
+        help="Cantidad de iteraciones de la metaheurística GRASP (por defecto: 20)",
+    )
+    parser.add_argument(
+        "--top_k",
+        type=int,
+        default=3,
+        help="Tamaño de la lista restringida de candidatos en GRASP (por defecto: 3)",
+    )
+    parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
@@ -46,6 +58,10 @@ def parsear_argumentos(argv: list[str] | None = None) -> argparse.Namespace:
         parser.error("Los parámetros --alpha y --beta deben ser >= 0.")
     if args.semilla < 0:
         parser.error("El parámetro --semilla debe ser >= 0.")
+    if args.max_iter < 1:
+        parser.error("El parámetro --max_iter debe ser >= 1.")
+    if args.top_k < 1:
+        parser.error("El parámetro --top_k debe ser >= 1.")
     return args
 
 
