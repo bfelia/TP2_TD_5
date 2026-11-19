@@ -31,8 +31,8 @@ def parsear_argumentos(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--semilla",
         type=int,
-        default=42,
-        help="Semilla entera para métodos aleatorios (por defecto: 42)",
+        default=18,
+        help="Semilla entera para métodos aleatorios (por defecto: 18)",
     )
     parser.add_argument(
         "--max_iter",
