@@ -43,16 +43,18 @@ def main() -> int:
         # leemos el metodo usado
         if cfg.metodo == "placeholder":
             sol = resolver_placeholder(inst)
-        # TODO: Agregar acá los métodos implementados por el grupo, por ejemplo:
         elif cfg.metodo == "constructiva1":
             sol = constructiva_temperatura_peso(inst)
         elif cfg.metodo == "constructiva2":
             sol = constructiva_similitud(inst)
         elif cfg.metodo == "bl1":
+            # constructiva por peso + busqueda local
             sol = busqueda_local(constructiva_temperatura_peso(inst), inst, cfg.alpha, cfg.beta)
         elif cfg.metodo == "bl2":
+            # constructiva por similitud + busqueda local
             sol = busqueda_local(constructiva_similitud(inst), inst, cfg.alpha, cfg.beta)
         elif cfg.metodo == "metaheuristica":
+            # grasp usando los parametros de linea de comandos
             sol = metaheuristica(inst, cfg.alpha, cfg.beta, cfg.semilla, cfg.max_iter, cfg.top_k)
         elif cfg.metodo == "test":
             print(min([5,2,3,9,7,8]))            

@@ -66,7 +66,7 @@ def parsear_argumentos(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def leer_instancia(ruta_archivo: str | Path) -> Instancia:
-    """Lee y valida una instancia desde un archivo con el formato del enunciado."""
+    # lee el archivo de entrada y chequea que el formato y los rangos esten bien
     ruta = Path(ruta_archivo)
     if not ruta.is_file():
         raise FileNotFoundError(f"No se encontró el archivo de entrada: {ruta}")
@@ -145,7 +145,7 @@ def leer_instancia(ruta_archivo: str | Path) -> Instancia:
 
 
 def escribir_solucion(ruta_archivo: str | Path, sol: Solucion) -> None:
-    """Escribe la solución: una línea por vehículo con índices base 0 separados por espacio."""
+    # escribe una linea por vehiculo usado con los ids separados por espacio
     lineas = [
         " ".join(str(prod_id) for prod_id in vehiculo)
         for vehiculo in sol.vehiculos
@@ -194,7 +194,7 @@ def validar_solucion_basica(inst: Instancia, sol: Solucion) -> tuple[bool, str]:
 def calcular_metricas(
     inst: Instancia, sol: Solucion, alpha: float, beta: float
 ) -> Metricas:
-    """Calcula K, suma de similitudes intra-vehículo y función objetivo base."""
+    # calcula K, la suma de similitudes adentro de cada camion y el objetivo alpha*K - beta*S
     vehiculos_no_vacios = [v for v in sol.vehiculos if v]
     k = len(vehiculos_no_vacios)
     suma_similitudes = 0.0

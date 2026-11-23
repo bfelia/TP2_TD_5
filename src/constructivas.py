@@ -16,6 +16,7 @@ def constructiva_temperatura_peso(inst:Instancia) -> Solucion:
             raise ValueError(f"Hay productos con temperatura fuera de rango: {ids_invalidos}")
     
     for cat in categorias_temp:
+        # ordenamos de mayor a menor peso
         productos_ordenados = sorted(temperaturas_dict[cat], key=lambda p: p.peso, reverse=True)
         vehiculos_cat: list[list[int]] = []
         pesos_cat: list[float] = []
@@ -27,6 +28,7 @@ def constructiva_temperatura_peso(inst:Instancia) -> Solucion:
                 )
 
             ubicado = False
+            # probamos meterlo en el primer camion de esta categoria donde entre
             for k in range(len(vehiculos_cat)):
                 if pesos_cat[k] + producto.peso <= inst.capacidad_vehiculo + 1e-9:
                     vehiculos_cat[k].append(producto.id)
@@ -35,6 +37,7 @@ def constructiva_temperatura_peso(inst:Instancia) -> Solucion:
                     break
 
             if not ubicado:
+                # si no entro en ninguno, abrimos un vehiculo nuevo
                 vehiculos_cat.append([producto.id])
                 pesos_cat.append(producto.peso)
 
@@ -93,7 +96,7 @@ def constructiva_similitud(
     ]
 
     for cat in categorias_temp:
-        # Ordenamos por peso descendente para tomar semillas pesadas primero.
+        # ordenamos por peso descendente para arrancar con semillas pesadas
         libres = sorted(temperaturas_dict[cat], key=lambda p: (-p.peso, p.id))
 
         while libres:
@@ -108,7 +111,7 @@ def constructiva_similitud(
                         sim_con_vehiculo = sum(
                             inst.similitud[prod.id][u] for u in vehiculo
                         )
-                        # Ordenar por mayor similitud acumulada, luego mayor peso, luego menor id
+                        # guardamos similitud acumulada, peso y id para desempatar
                         candidatos.append((sim_con_vehiculo, prod.peso, -prod.id, idx))
 
                 if not candidatos:
@@ -116,6 +119,7 @@ def constructiva_similitud(
 
                 candidatos.sort(reverse=True)
                 limite = min(top_k, len(candidatos))
+                # si top_k=1 agarra siempre el mejor, si es >1 sortea entre los mejores (para grasp)
                 elegido = candidatos[0] if limite == 1 else rng.choice(candidatos[:limite])
                 idx_libre = elegido[3]
                 prod_elegido = libres.pop(idx_libre)

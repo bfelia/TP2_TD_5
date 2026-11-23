@@ -58,10 +58,13 @@ def peso_vehiculo_valida(vehiculo, inst: Instancia) -> bool:
     return True
 
 def es_vehiculo_valido(vehiculo, inst: Instancia) -> bool:
+    # un vehiculo es valido si cumple las dos restricciones duras: temperatura y peso
     return temperatura_vehiculo_valida(vehiculo, inst) and peso_vehiculo_valida(vehiculo, inst)
 
 def es_solucion_factible(inst:Instancia, sol: Solucion) -> bool:
+    # primero chequeamos BPP basico (todos los items una sola vez y sin pasarse de capacidad)
     if not validar_solucion_basica(inst, sol)[0]: return False
+    # despues verificamos que cada camion cumpla temperatura y peso
     for vehiculo in sol.vehiculos:
         if es_vehiculo_valido(vehiculo, inst)!=True:
             return False

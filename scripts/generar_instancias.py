@@ -82,6 +82,7 @@ def generar_instancia(
         else [c.proporcion for c in CATEGORIAS]
     )
 
+    # sorteamos a que rubro pertenece cada producto y generamos peso y temp
     cats_elegidas = rng.choices(CATEGORIAS, weights=pesos_cat, k=n)
     productos: list[tuple[float, float]] = []
 
@@ -92,6 +93,7 @@ def generar_instancia(
         temp = round(rng.uniform(cat.temp_min, cat.temp_max), 1)
         productos.append((peso, temp))
 
+    # armamos la matriz simetrica de similitudes segun los pares de rubros
     matriz = [[1.0] * n for _ in range(n)]
     for i in range(n):
         for j in range(i + 1, n):

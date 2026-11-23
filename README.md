@@ -39,7 +39,7 @@ python3 main.py <archivo_input> <archivo_output> [--metodo M] [--alpha A] [--bet
   * `metaheuristica`: GRASP usando `constructiva2` aleatorizada + búsqueda local.
 * `--alpha A`: peso $\alpha \ge 0$ de la cantidad de vehículos $K$ en la función objetivo (por defecto `1.0`).
 * `--beta B`: peso $\beta \ge 0$ de la suma de similitudes en la función objetivo (por defecto `1.0`).
-* `--semilla S`: semilla entera no negativa para métodos aleatorios (por defecto `42`).
+* `--semilla S`: semilla entera no negativa para métodos aleatorios (por defecto `18`).
 * `--max_iter I`: cantidad de iteraciones de GRASP en `--metodo metaheuristica` (por defecto `20`).
 * `--top_k K`: tamaño de la lista restringida de candidatos (RCL) en GRASP (por defecto `3`).
 * `--verbose` / `-v`: imprime información adicional de la instancia cargada.

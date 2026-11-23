@@ -3,9 +3,11 @@ from src.tipos import Instancia, Producto, Solucion, Temperatura
 from src.io_tp import calcular_metricas
 
 def relocate(sol: Solucion, inst: Instancia, pos_vehiculoA: int, pos_vehiculoB: int, alpha: float, beta: float) -> Solucion:
+    # copiamos las listas para no modificar la solucion original
     vehiculos0 = [list(v) for v in sol.vehiculos]
     mejor_solucion = [list(v) for v in sol.vehiculos]
 
+    # si alguno de los indices es invalido o tienen distinta temperatura no hacemos nada
     if (
         (pos_vehiculoA == pos_vehiculoB) or
         (pos_vehiculoA >= len(vehiculos0)) or
@@ -28,15 +30,18 @@ def relocate(sol: Solucion, inst: Instancia, pos_vehiculoA: int, pos_vehiculoB: 
     metricas_iniciales = calcular_metricas(inst, sol, alpha, beta)
     mejor_objetivo = metricas_iniciales.objetivo_base
 
+    # probamos mover cada producto de A hacia B y nos quedamos con el mejor movimiento
     for p in list(vehiculoA):
         vehiculoB.append(p)
         vehiculoA.remove(p)
         if es_vehiculo_valido(vehiculoB, inst):
+            # filtramos por si A quedo vacio al sacar el producto
             sol_candidata = Solucion(vehiculos=[v for v in vehiculos0 if len(v) > 0])
             metricas_cambio = calcular_metricas(inst, sol_candidata, alpha, beta)
             if metricas_cambio.objetivo_base < mejor_objetivo - 1e-9:
                 mejor_objetivo = metricas_cambio.objetivo_base
                 mejor_solucion = [list(v) for v in sol_candidata.vehiculos]
+        # deshacemos el movimiento para probar el siguiente producto desde el estado inicial
         vehiculoB.pop()
         vehiculoA.append(p)
 
@@ -116,12 +121,14 @@ def swap(
 
 
 def busqueda_local(sol: Solucion, inst: Instancia, alpha: float, beta: float) -> Solucion:
+    # copiamos la solucion y arrancamos el ciclo con relocate primero, swap si se traba
     sol_actual = Solucion(vehiculos=[list(v) for v in sol.vehiculos])
     objetivo_actual = calcular_metricas(inst, sol_actual, alpha, beta).objetivo_base
     mejoro = True
 
     while mejoro:
         mejoro = False
+        # primero probamos todos los pares con relocate
         for i in range(len(sol_actual.vehiculos)):
             for j in range(len(sol_actual.vehiculos)):
                 if i == j:
@@ -132,10 +139,12 @@ def busqueda_local(sol: Solucion, inst: Instancia, alpha: float, beta: float) ->
                     sol_actual = candidato
                     objetivo_actual = obj_candidato
                     mejoro = True
+                    # cortamos porque si se vacio un vehiculo cambian los indices
                     break
             if mejoro:
                 break
 
+        # si relocate no mejoro nada, probamos swap entre pares i < j
         if not mejoro:
             for i in range(len(sol_actual.vehiculos)):
                 for j in range(i + 1, len(sol_actual.vehiculos)):
